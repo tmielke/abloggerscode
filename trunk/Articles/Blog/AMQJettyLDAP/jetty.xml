@@ -29,8 +29,6 @@
     </bean>
 	-->
 
-    <bean id="defaultIdentityService" class="org.eclipse.jetty.security.DefaultIdentityService" />
-
     <bean id="securityLoginService" class="org.eclipse.jetty.plus.jaas.JAASLoginService">
         <property name="name" value="ActiveMQLDAPRealm" />
         <property name="LoginModuleName" value="jetty-ldap"/>
@@ -38,14 +36,12 @@
 		<property name="roleClassNames" value="org.eclipse.jetty.plus.jaas.JAASRole" />
     </bean>
 
+    <bean id="defaultIdentityService" class="org.eclipse.jetty.security.DefaultIdentityService" />
 
     <bean id="securityConstraint" class="org.eclipse.jetty.http.security.Constraint"> 
-      <property name="name" value="BASIC" />
-      <!--
-      <property name="name" value="DIGEST" />
-      -->
-      <property name="roles" value="admins" />
-      <property name="authenticate" value="true" />
+        <property name="name" value="BASIC" />
+        <property name="roles" value="admins" />
+        <property name="authenticate" value="true" />
     </bean>
     <bean id="securityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
         <property name="constraint" ref="securityConstraint" />
@@ -56,9 +52,6 @@
         <property name="loginService" ref="securityLoginService" />
         <property name="authenticator">
             <bean class="org.eclipse.jetty.security.authentication.BasicAuthenticator" />
-	    <!--
-	    <bean class="org.eclipse.jetty.security.authentication.DigestAuthenticator" />
-	    -->
         </property>
         <property name="constraintMappings">
             <list>
