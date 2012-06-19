@@ -1,5 +1,4 @@
-
-    <!--
+<!--
         Licensed to the Apache Software Foundation (ASF) under one or more contributor
         license agreements. See the NOTICE file distributed with this work for additional
         information regarding copyright ownership. The ASF licenses this file to You under
@@ -11,12 +10,12 @@
         "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
         implied. See the License for the specific language governing permissions and
         limitations under the License.
-    -->
-    <!--
+-->
+<!--
         An embedded servlet engine for serving up the Admin consoles, REST and Ajax APIs and
         some demos Include this file in your configuration to enable ActiveMQ web components
         e.g. <import resource="jetty.xml"/>
-    -->
+-->
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
@@ -29,20 +28,24 @@
     </bean>
 	-->
 
+    <bean id="defaultIdentityService" class="org.eclipse.jetty.security.DefaultIdentityService" />
+
     <bean id="securityLoginService" class="org.eclipse.jetty.plus.jaas.JAASLoginService">
         <property name="name" value="ActiveMQLDAPRealm" />
         <property name="LoginModuleName" value="jetty-ldap"/>
-		<property name="CallbackHandlerClass" value="org.eclipse.jetty.plus.jaas.callback.DefaultCallbackHandler" />
-		<property name="roleClassNames" value="org.eclipse.jetty.plus.jaas.JAASRole" />
+	<property name="roleClassNames" value="org.eclipse.jetty.plus.jaas.JAASRole" />
     </bean>
 
-    <bean id="defaultIdentityService" class="org.eclipse.jetty.security.DefaultIdentityService" />
 
-    <bean id="securityConstraint" class="org.eclipse.jetty.http.security.Constraint"> 
-        <property name="name" value="BASIC" />
-        <property name="roles" value="admins" />
-        <property name="authenticate" value="true" />
+    <bean id="securityConstraint" class="org.eclipse.jetty.util.security.Constraint"> 
+      <property name="name" value="BASIC" />
+      <!--
+      <property name="name" value="DIGEST" />
+      -->
+      <property name="roles" value="admins" />
+      <property name="authenticate" value="true" />
     </bean>
+
     <bean id="securityConstraintMapping" class="org.eclipse.jetty.security.ConstraintMapping">
         <property name="constraint" ref="securityConstraint" />
         <property name="pathSpec" value="/*" />
@@ -52,6 +55,9 @@
         <property name="loginService" ref="securityLoginService" />
         <property name="authenticator">
             <bean class="org.eclipse.jetty.security.authentication.BasicAuthenticator" />
+	    <!--
+	    <bean class="org.eclipse.jetty.security.authentication.DigestAuthenticator" />
+	    -->
         </property>
         <property name="constraintMappings">
             <list>
